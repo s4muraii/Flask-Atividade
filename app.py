@@ -14,7 +14,7 @@ def csvCriar():
             writer = csv.writer(file)
             writer.writerow(["ID", "Tarefa", "Status"])
 
-def escrever_csv(tarefaList):
+def csvEscrever(tarefaList):
     with open(arquivo, mode="w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(["ID", "Tarefa", "Status"])
@@ -22,8 +22,8 @@ def escrever_csv(tarefaList):
             writer.writerow([tarefa["ID"], tarefa["Tarefa"], tarefa["Status"]])
 
 
-def ler_csv():
-    with open(arquivo_csv, mode="r", newline="") as file:
+def csvLer():
+    with open(arquivo, mode="r", newline="") as file:
         reader = csv.reader(file)
         next(reader)
         tarefaList = []
@@ -38,15 +38,15 @@ def ler_csv():
 
 csvCriar()
 
-tarefaList = ler_csv()
+tarefaList = csvLer()
 
 @app.route("/", methods=["GET"])
 def index():
-  tarefas = ler_csv()
-  tarefas_visiveis = [
-      tarefa for tarefa in tarefas if tarefa["Status"] != "Deletada"
-  ]
-  return tarefas_visiveis
+    tarefas = csvLer()
+    tarefas_visiveis = [
+        tarefa for tarefa in tarefas if tarefa["Status"] != "Deletada"
+    ]
+    return tarefas_visiveis
 
 if __name__ == '__main__':
     app.run(debug=True)
