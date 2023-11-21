@@ -40,41 +40,13 @@ csvCriar()
 
 tarefaList = ler_csv()
 
-@app.route('/', methods=['GET'])
-def get():
-    with open(arquivo, 'r') as f:
-        reader = csv.reader(f)
-        data = list(reader)
-    return jsonify(data)
-
-@app.route('/api', methods=['POST'])
-def post():
-    data = request.json
-    with open(arquivo, 'a') as f:
-        writer = csv.writer(f)
-        writer.writerow(data)
-    return jsonify(data)
-
-@app.route('/api/<int:id>', methods=['PUT'])
-def put(id):
-    data = request.json
-    with open(arquivo, 'r') as f:
-        reader = csv.reader(f)
-        data = list(reader)
-    with open(arquivo, 'w') as f:
-        writer = csv.writer(f)
-        writer.writerow(data[id])
-    return jsonify(data[id])
-
-@app.route('/api/<int:id>', methods=['DELETE'])
-def delete(id):
-    with open(arquivo, 'r') as f:
-        reader = csv.reader(f)
-        data = list(reader)
-    with open(arquivo, 'w') as f:
-        writer = csv.writer(f)
-        writer.writerow(data[id])
-    return jsonify(data[id])
+@app.route("/", methods=["GET"])
+def index():
+  tarefas = ler_csv()
+  tarefas_visiveis = [
+      tarefa for tarefa in tarefas if tarefa["Status"] != "Deletada"
+  ]
+  return tarefas_visiveis
 
 if __name__ == '__main__':
     app.run(debug=True)
